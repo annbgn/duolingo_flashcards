@@ -1,26 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'flashcards/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Duo flashcards</title>
-</head>
+{% block content %}
 
-<body>
-    <form action="{% url 'practice' %}" method="POST">{% csrf_token %}
+<form action="{% url 'practice' %}" method="POST">{% csrf_token %}
 
-        <button type="submit" onclick="">Continue</button>
+    <button type="submit" onclick="">Continue</button>
 
-    </form>
-    <ul>
-        {% for card in deck %}
-        <li>{{card.front}}</li>
-        <li>{{card.back}}</li>
-        <br>
-        {% endfor %}
-    </ul>
-
-
-</body>
-
-</html>
+</form>
+<ul>
+    {% for card in deck %}
+    <li>{{card.front}}</li>
+    <li>{{card.back}}</li>
+    <br>
+    {% endfor %}
+</ul>
+{% endblock %}
