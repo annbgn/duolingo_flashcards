@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Duo flashcards</title>
+</head>
+
+<body>
+    <div class="container">
+        <p>Here is the list of your ratget languages</p>
+        <p>Choose one language for flashcards</p>
+        <form action="{% url 'wordlist' %}" method="POST">{% csrf_token %}
+            <label for="lang">Choose a language:</label>
+
+            <select name="lang" id="langs">
+                {% for lang in langs %}
+                <option value="{{ lang }}">{{ lang }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" onclick="">Submit</button>
+
+        </form>
+    </div>
+</body>
+
+</html>

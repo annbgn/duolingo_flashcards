@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Duo flashcards</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        var global_deck = "{{deck|escapejs}}";
+        var current_card = 0;
+
+        function flip() {
+            let front = document.getElementById('front');
+            let back = document.getElementById('back');
+            if (front.innerHTML == "") {
+                front.innerHTML = global_deck.flashcards[current_card].front;
+                back.innerHTML = "";
+            } else {
+                front.innerHTML = "";
+                back.innerHTML = global_deck.flashcards[current_card].back;
+            }
+        }
+
+        function nextcard() {}
+
+        function popcard() {}
+
+        function addcard() {}
+
+    </script>
+    <div id="current_flashcard" onclick="flip();">
+        <p id="front"> {{deck.flashcards.0}} </p>
+        <!--todo check somewhere previously, that deck.flachcards is not empty-->
+        <p id="back"></p>
+        <button id="right" onclick="popcard(); nextcard();">right</button>
+        <button id="wrong" onclick="addcard(); nextcard();">wrong</button>
+    </div>
+</body>
+
+</html>
