@@ -1,30 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'flashcards/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Duo flashcards</title>
-</head>
-
-<body>
-
-    <div class="container">
-        <form action="{% url 'get_login_data' %}" method="POST">{% csrf_token %}
+{% block content %}
+<div class="container">
+    <form action="{% url 'get_login_data' %}" method="POST">{% csrf_token %}
 
 
-            <!--<label for="uname"><b>Username</b></label>-->
-            <input id="uname" type="text" placeholder="Enter Username" name="uname" required>
-            <br>
-            <!--<label for="psw"><b>Password</b></label>-->
-            <input id="psw" type="password" placeholder="Enter Password" name="psw" required>
-            <br>
+        <!--<label for="uname"><b>Username</b></label>-->
+        <input id="uname" type="text" placeholder="Enter Username" name="uname" required>
+        <br>
+        <!--<label for="psw"><b>Password</b></label>-->
+        <input id="psw" type="password" placeholder="Enter Password" name="psw" required>
+        <br>
 
 
-            <button type="submit" onclick="">Go!</button>
+        <button type="submit" onclick="">Go!</button>
 
-        </form>
-        <p>no data is stored, it is only needed to retrieve your duolingo wordlist.</p>
-    </div>
-</body>
-
-</html>
+    </form>
+    <p>no data is stored, it is only needed to retrieve your duolingo wordlist.</p>
+</div>
+{% endblock %}
