@@ -4,8 +4,9 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import duolingo
 from .logic.duo import duo
-from .logic.flashcard import Deck, deck
 import random
+import datetime
+import ujson
 
 
 def index(request):
@@ -30,21 +31,31 @@ def get_login_data_view(request):
     # todo: validate
 
     try:
+        start = datetime.datetime.now()
         duo.duo = duolingo.Duolingo(username, password)
+        end = datetime.datetime.now() - start
+        print(end)
     except Exception as ಠ_ಠ:
         print(ಠ_ಠ)
         # todo: return message or redirect to index
 
+    start = datetime.datetime.now()
     context = {"langs": duo.duo.get_languages(abbreviations=True)}
+    end = datetime.datetime.now() - start
+    print(end)
     print(context)
     return render(request, "flashcards/select_language.html", context)
 
 
 @csrf_exempt
 def wordlist(request):
+    from .logic.flashcard import Deck, deck
     lang = request.POST.get("lang", None)
     # skills = list(map(lambda x: x.get('name', '').lowercase(), duo.duo.get_learned_skills(lang)))
+    start = datetime.datetime.now()
     vocab_dict = duo.duo.get_vocabulary(language_abbr=lang)
+    end = datetime.datetime.now() - start
+    print(end)
     amount = len(vocab_dict.get("vocab_overview", []))
     # sorted(vocab_dict, key=lambda x: x['order'], reverse=True)
 
@@ -52,12 +63,15 @@ def wordlist(request):
     known_lang = vocab_dict.get('from_language')
     flashcard_billets = random.sample(vocab_dict.get("vocab_overview", []), k=20 if amount > 20 else amount)
 
-    deck = Deck(flashcard_billets, target_lang, known_lang)
+    deck = deck.fill_deck(flashcard_billets, target_lang, known_lang)
     context = {"deck": deck}
     return render(request, "flashcards/wordlist.html", context)
 
 
 @csrf_exempt
 def practice(request):
-    context = {"deck": deck}
+    from .logic.flashcard import Deck, deck
+    data = {fc.front: fc.back for fc in deck.flashcards}
+    context = {"deck": ujson.dumps(data)}
+    print (context)
     return render(request, "flashcards/practice.html", context)

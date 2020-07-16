@@ -1,34 +1,45 @@
 {% extends 'flashcards/base.html' %}
 
 {% block content %}
-<script type="text/javascript">
-    var global_deck = "{{deck|escapejs}}";
-    var current_card = 0;
+<div id="current_flashcard" onclick="flip();">
+    <p id="all_data" hidden> {{deck}} </p>
+    <p id="front"></p>
+    <!--todo check somewhere previously, that deck.flachcards is not empty-->
+    <p id="back"></p>
+    <button id="right" onclick="popcard(); nextcard()   ;">right</button>
+    <button id="wrong" onclick="addcard(); nextcard();">wrong</button>
+</div>
+{% endblock %}
 
-    function flip() {
-        let front = document.getElementById('front');
-        let back = document.getElementById('back');
-        if (front.innerHTML == "") {
-            front.innerHTML = global_deck.flashcards[current_card].front;
-            back.innerHTML = "";
+
+
+{% block script %}
+
+
+<script type="text/javascript">
+    var data = document.getElementById("all_data").innerHTML;
+    data = JSON.parse(data);
+    var fronts = Object.keys(data);
+    // todo check if data is not empty ( in django view mb)
+    var current = 0;
+
+    document.getElementById('front').innerHTML = fronts[current];
+    document.getElementById('back').innerHTML = data[fronts[current]];
+
+    function nextcard() {
+        current = current + 1;
+        if (current > fronts.length) {
+            //todo show restart buton which redirects somewhere
         } else {
-            front.innerHTML = "";
-            back.innerHTML = global_deck.flashcards[current_card].back;
+            document.getElementById('front').innerHTML = fronts[current];
+            document.getElementById('back').innerHTML = data[fronts[current]];
+            // manage right and wrong stuff? oh gotcha: thats what popcard and addcard are for
         }
     }
-
-    function nextcard() {}
 
     function popcard() {}
 
     function addcard() {}
 
 </script>
-<div id="current_flashcard" onclick="flip();">
-    <p id="front"> {{deck.flashcards.0}} </p>
-    <!--todo check somewhere previously, that deck.flachcards is not empty-->
-    <p id="back"></p>
-    <button id="right" onclick="popcard(); nextcard();">right</button>
-    <button id="wrong" onclick="addcard(); nextcard();">wrong</button>
-</div>
 {% endblock %}
