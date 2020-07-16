@@ -2,8 +2,8 @@
 
 {% block content %}
 <div id="current_flashcard" onclick="flip();">
-    <p id="AAAAA"> {{deck}} </p>
-    <p id="front"> </p>
+    <p id="all_data" hidden> {{deck}} </p>
+    <p id="front"></p>
     <!--todo check somewhere previously, that deck.flachcards is not empty-->
     <p id="back"></p>
     <button id="right" onclick="popcard(); nextcard()   ;">right</button>
@@ -17,11 +17,14 @@
 
 
 <script type="text/javascript">
-    var data = document.getElementById("AAAAA").innerHTML;
+    var data = document.getElementById("all_data").innerHTML;
     data = JSON.parse(data);
     var fronts = Object.keys(data);
     // todo check if data is not empty ( in django view mb)
     var current = 0;
+
+    document.getElementById('front').innerHTML = fronts[current];
+    document.getElementById('back').innerHTML = data[fronts[current]];
 
     function nextcard() {
         current = current + 1;
@@ -33,9 +36,10 @@
             // manage right and wrong stuff? oh gotcha: thats what popcard and addcard are for
         }
     }
-    
-        function popcard() {}
-        function addcard() {}
+
+    function popcard() {}
+
+    function addcard() {}
 
 </script>
 {% endblock %}
