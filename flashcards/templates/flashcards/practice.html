@@ -6,8 +6,8 @@
     <p id="front"></p>
     <!--todo check somewhere previously, that deck.flachcards is not empty-->
     <p id="back"></p>
-    <button id="right" onclick="popcard(); nextcard()   ;">right</button>
     <button id="wrong" onclick="addcard(); nextcard();">wrong</button>
+    <button id="right" onclick="popcard(); nextcard();">right</button>
 </div>
 {% endblock %}
 
@@ -17,6 +17,23 @@
 
 
 <script type="text/javascript">
+    document.addEventListener('keypress', function(event) {
+        if (event.keyCode == 32) {
+            flip();
+            //space
+        } else if (event.key == 'd') {
+            document.getElementById('right').click()
+        } else if (event.key == 'a') {
+            document.getElementById('wrong').click()
+        }
+    });
+    document.addEventListener('keydown', function(event) {
+        if (event.key == 'ArrowRight') {
+            document.getElementById('right').click()
+        } else if (event.key == 'ArrowLeft') {
+            document.getElementById('wrong').click()
+        }
+    });
     var data = document.getElementById("all_data").innerHTML;
     data = JSON.parse(data);
     var fronts = Object.keys(data);
@@ -26,6 +43,7 @@
     document.getElementById('front').innerHTML = fronts[current];
     document.getElementById('back').innerHTML = data[fronts[current]];
     document.getElementById('back').hidden = true;
+
 
     function nextcard() {
         current = current + 1;
