@@ -25,6 +25,7 @@
 
     document.getElementById('front').innerHTML = fronts[current];
     document.getElementById('back').innerHTML = data[fronts[current]];
+    document.getElementById('back').hidden = true;
 
     function nextcard() {
         current = current + 1;
@@ -40,6 +41,18 @@
     function popcard() {}
 
     function addcard() {}
+
+    function flip() {
+        let front = document.getElementById('front');
+        let back = document.getElementById('back');
+        if (front.hidden) {
+            front.hidden = false;
+            back.hidden = true;
+        } else {
+            front.hidden = true;
+            back.hidden = false;
+        }
+    }
 
 </script>
 {% endblock %}
