@@ -1,13 +1,14 @@
 {% extends 'flashcards/base.html' %}
 
 {% block content %}
+<button id='restart' hidden> <a href={% url 'index' %}> restart </a> </button>
 <div id="current_flashcard" onclick="flip();">
     <p id="all_data" hidden> {{deck}} </p>
     <p id="front"></p>
     <!--todo check somewhere previously, that deck.flachcards is not empty-->
     <p id="back"></p>
-    <button id="wrong" onclick="addcard(); nextcard();">wrong</button>
-    <button id="right" onclick="popcard(); nextcard();">right</button>
+    <button id="wrong" onclick="addcard(); nextcard(); flip_restore_balance();">wrong</button>
+    <button id="right" onclick="popcard(); nextcard(); flip_restore_balance();">right</button>
 </div>
 {% endblock %}
 
@@ -34,6 +35,8 @@
             document.getElementById('wrong').click()
         }
     });
+
+
     var data = document.getElementById("all_data").innerHTML;
     data = JSON.parse(data);
     var fronts = Object.keys(data);
@@ -47,18 +50,25 @@
 
     function nextcard() {
         current = current + 1;
-        if (current > fronts.length) {
-            //todo show restart buton which redirects somewhere
+        if (current >= fronts.length) {
+            alert('here');  
+            document.getElementById('front').hidden = true;
+            document.getElementById('back').hidden = true;
+            document.getElementById('restart').hidden = false;
         } else {
             document.getElementById('front').innerHTML = fronts[current];
             document.getElementById('back').innerHTML = data[fronts[current]];
-            // manage right and wrong stuff? oh gotcha: thats what popcard and addcard are for
         }
     }
 
-    function popcard() {}
+    function popcard() {
+        current = current - 1;
+        fronts.shift();
+    }
 
-    function addcard() {}
+    function addcard() {
+        fronts.push(fronts[current]);
+    }
 
     function flip() {
         let front = document.getElementById('front');
@@ -70,6 +80,14 @@
             front.hidden = true;
             back.hidden = false;
         }
+    }
+
+    function flip_restore_balance() {
+        // every new card should first be seen as front
+        let front = document.getElementById('front');
+        let back = document.getElementById('back');
+        front.hidden = false;
+        back.hidden = true;
     }
 
 </script>
