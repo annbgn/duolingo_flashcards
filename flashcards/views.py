@@ -85,7 +85,7 @@ def wordlist(request):
 def practice(request):
     from .logic.flashcard import Deck, deck
 
-    data = {fc.front: fc.back for fc in deck.flashcards}
+    data = {fc.front: {'back': fc.back, 'audio_url': fc.audio_url} for fc in deck.flashcards}
     context = {"deck": ujson.dumps(data)}
     print(context)
     return render(request, "flashcards/practice.html", context)

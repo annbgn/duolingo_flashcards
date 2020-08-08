@@ -1,7 +1,6 @@
 import datetime
-
 from translate import Translator
-
+from gtts import gTTS
 from .duo import duo
 
 
@@ -17,7 +16,6 @@ class Deck:
         translator = Translator(
             provider="mymemory", to_lang=known_lang, from_lang=target_lang
         )
-        print(target_lang, " ", known_lang)
         for i in raw:
             self.flashcards.append(
                 Flashcard(i, self.target_lang, self.known_lang, translator)
@@ -44,7 +42,7 @@ class Deck:
 class Flashcard:
     def __init__(self, entry, target_lang, known_lang, translator):
         self.target_lang = target_lang
-        self.target_lang = known_lang
+        self.known_lang = known_lang # probably unused. todo: optimize
         self.front = entry.get("word_string")
         start = datetime.datetime.now()
         self.back = translator.translate(self.front)
@@ -52,7 +50,12 @@ class Flashcard:
         end = datetime.datetime.now() - start
         print(end)
         start = datetime.datetime.now()
-        self.audio_url = duo.duo.get_audio_url(self.front, language_abbr=target_lang)
+        try:
+            tts = gTTS(text=self.back, lang=target_lang, slow=False)
+        except AssertionError:
+            self.audio_url = ''
+        else:
+            self.audio_url = tts.get_urls()
         end = datetime.datetime.now() - start
         print(end)
 
