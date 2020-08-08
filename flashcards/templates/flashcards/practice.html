@@ -58,17 +58,16 @@
         } else {
             document.getElementById('front').innerHTML = fronts[current];
             document.getElementById('back').innerHTML = data[fronts[current]];
-            // manage right and wrong stuff? oh gotcha: thats what popcard and addcard are for
         }
     }
 
     function popcard() {
-        current = current - 1; // ???
+        current = current - 1;
         fronts.shift();
     }
 
     function addcard() {
-        fronts.append(fronts[current]); //?
+        fronts.push(fronts[current]);
     }
 
     function flip() {
