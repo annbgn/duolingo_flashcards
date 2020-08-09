@@ -1,8 +1,8 @@
-import datetime
+import json
+import random
 
+import requests
 from translate import Translator
-
-from .duo import duo
 
 
 class Deck:
@@ -17,10 +17,24 @@ class Deck:
         translator = Translator(
             provider="mymemory", to_lang=known_lang, from_lang=target_lang
         )
-        print(target_lang, " ", known_lang)
+        response = requests.get("https://www.duolingo.com/api/1/version_info")
+        if response.ok:
+            try:
+                data = json.loads(response.content)
+                tts = data["tts_base_url_http"]
+                voices = json.loads(data["tts_voice_configuration"]["multi_voices"])[
+                    target_lang
+                ]
+                voices[0]
+            except Exception as ಠ_ಠ:
+                print(ಠ_ಠ)
+                audio_base = None
+            else:
+                audio_base = tts + "tts/" + random.choice(voices) + "/token"
+
         for i in raw:
             self.flashcards.append(
-                Flashcard(i, self.target_lang, self.known_lang, translator)
+                Flashcard(i, self.target_lang, self.known_lang, translator, audio_base)
             )
 
     def __str__(self):
@@ -42,19 +56,14 @@ class Deck:
 
 
 class Flashcard:
-    def __init__(self, entry, target_lang, known_lang, translator):
+    def __init__(self, entry, target_lang, known_lang, translator, audio_base):
         self.target_lang = target_lang
-        self.target_lang = known_lang
+        self.known_lang = known_lang  # probably unused. todo: optimize
         self.front = entry.get("word_string")
-        start = datetime.datetime.now()
         self.back = translator.translate(self.front)
         print(self.front, " ", self.back)
-        end = datetime.datetime.now() - start
-        print(end)
-        start = datetime.datetime.now()
-        self.audio_url = duo.duo.get_audio_url(self.front, language_abbr=target_lang)
-        end = datetime.datetime.now() - start
-        print(end)
+
+        self.audio_url = audio_base + "/" + self.front if audio_base else None
 
     def __str__(self):
         return "Flashcard({}, {})".format(self.front, self.back)
