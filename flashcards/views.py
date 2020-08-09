@@ -42,14 +42,12 @@ def get_login_data_view(request):
 
 
 @csrf_exempt
-def wordlist(request):
-    from .logic.flashcard import deck
+def practice(request):
+    from .logic.flashcard import Deck, deck
 
     lang = request.POST.get("lang", None)
-    # skills = list(map(lambda x: x.get('name', '').lowercase(), duo.duo.get_learned_skills(lang)))
     vocab_dict = duo.duo.get_vocabulary(language_abbr=lang)
     amount = len(vocab_dict.get("vocab_overview", []))
-    # sorted(vocab_dict, key=lambda x: x['order'], reverse=True)
 
     target_lang = vocab_dict.get("learning_language")
     known_lang = vocab_dict.get("from_language")
@@ -57,16 +55,8 @@ def wordlist(request):
         vocab_dict.get("vocab_overview", []), k=20 if amount > 20 else amount
     )
 
-    deck = deck.fill_deck(flashcard_billets, target_lang, known_lang)
+    deck.fill_deck(flashcard_billets, target_lang, known_lang)
     print(deck)
-
-    context = {"deck": deck}
-    return render(request, "flashcards/wordlist.html", context)
-
-
-@csrf_exempt
-def practice(request):
-    from .logic.flashcard import deck
 
     data = {
         fc.front: {"back": fc.back, "audio_url": fc.audio_url} for fc in deck.flashcards
