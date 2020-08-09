@@ -77,6 +77,7 @@
             front.hidden = false;
             back.hidden = true;
         } else {
+            playSound(data[fronts[current]].audio_url);
             front.hidden = true;
             back.hidden = false;
         }
@@ -91,8 +92,11 @@
     }
 
     function playSound(url) {
-        var audio = new Audio(url);
-        audio.play();
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url); // todo: + corsheaders
+        xhr.send()
+        //let audio = new Audio(lexeme_id);
+        //audio.play();
     }
 
 </script>
