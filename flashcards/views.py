@@ -1,11 +1,8 @@
-import datetime
 import random
 
 import duolingo
-from django.http import HttpResponse
 from django.shortcuts import render
-from django.template import loader
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 
 import ujson
 
@@ -34,29 +31,23 @@ def get_login_data_view(request):
     # todo: validate
 
     try:
-        start = datetime.datetime.now()
         duo.duo = duolingo.Duolingo(username, password)
-        end = datetime.datetime.now() - start
     except Exception as ಠ_ಠ:
         print(ಠ_ಠ)
         # todo: return message or redirect to index
 
-    start = datetime.datetime.now()
     context = {"langs": duo.duo.get_languages(abbreviations=True)}
-    end = datetime.datetime.now() - start
     print(context)
     return render(request, "flashcards/select_language.html", context)
 
 
 @csrf_exempt
 def wordlist(request):
-    from .logic.flashcard import Deck, deck
+    from .logic.flashcard import deck
 
     lang = request.POST.get("lang", None)
     # skills = list(map(lambda x: x.get('name', '').lowercase(), duo.duo.get_learned_skills(lang)))
-    start = datetime.datetime.now()
     vocab_dict = duo.duo.get_vocabulary(language_abbr=lang)
-    end = datetime.datetime.now() - start
     amount = len(vocab_dict.get("vocab_overview", []))
     # sorted(vocab_dict, key=lambda x: x['order'], reverse=True)
 
@@ -66,10 +57,8 @@ def wordlist(request):
         vocab_dict.get("vocab_overview", []), k=20 if amount > 20 else amount
     )
 
-    start = datetime.datetime.now()
     deck = deck.fill_deck(flashcard_billets, target_lang, known_lang)
     print(deck)
-    end = datetime.datetime.now() - start
 
     context = {"deck": deck}
     return render(request, "flashcards/wordlist.html", context)
@@ -77,9 +66,11 @@ def wordlist(request):
 
 @csrf_exempt
 def practice(request):
-    from .logic.flashcard import Deck, deck
+    from .logic.flashcard import deck
 
-    data = {fc.front: {'back': fc.back, 'audio_url': fc.audio_url} for fc in deck.flashcards}
+    data = {
+        fc.front: {"back": fc.back, "audio_url": fc.audio_url} for fc in deck.flashcards
+    }
     context = {"deck": ujson.dumps(data)}
     print(context)
     return render(request, "flashcards/practice.html", context)
