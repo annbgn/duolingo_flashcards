@@ -4,7 +4,7 @@
 <div class="container">
     <p>Here is the list of your ratget languages</p>
     <p>Choose one language for flashcards</p>
-    <form action="{% url 'wordlist' %}" method="POST">{% csrf_token %}
+    <form action="{% url 'practice' %}" method="POST">{% csrf_token %}
         <label for="lang">Choose a language:</label>
 
         <select name="lang" id="langs">

@@ -22,9 +22,7 @@ class Deck:
             try:
                 data = json.loads(response.content)
                 tts = data["tts_base_url_http"]
-                voices = json.loads(data["tts_voice_configuration"]["multi_voices"])[
-                    target_lang
-                ]
+                voices = json.loads(data["tts_voice_configuration"]["multi_voices"])[target_lang]
                 voices[0]
             except Exception as ಠ_ಠ:
                 print(ಠ_ಠ)
