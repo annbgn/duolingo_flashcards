@@ -1,17 +1,40 @@
+{% block style %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'flashcards/base.css' %}">
+{% endblock %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Duo flashcards</title>
-
 </head>
 
 <body>
-    <div class="page-header" align='center'>
-        <h1>Duolingo flashcards</h1>
+
+    <div class="top_navigation" id="top_navigation">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="javascript:void(0);" class="icon" onclick="responsive_top_navigation()">
+            <i class="fa fa-bars"></i>
+        </a>
+
+        <script>
+            function responsive_top_navigation() {
+                var x = document.getElementById("top_navigation");
+                if (x.className === "top_navigation") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "top_navigation";
+                }
+            }
+
+        </script>
     </div>
-    <div align='center'>
+
+    <div align='center' class="content">
         {% block content %}
         {% endblock %}
         {% block script %}
