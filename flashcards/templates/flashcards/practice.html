@@ -57,7 +57,6 @@
         } else {
             document.getElementById('front').innerHTML = fronts[current];
             document.getElementById('back').innerHTML = data[fronts[current]].back;
-            playSound(data[fronts[current]].audio_url);
         }
     }
 
@@ -76,8 +75,8 @@
         if (front.hidden) {
             front.hidden = false;
             back.hidden = true;
+            say_word(data[fronts[current]].audio_url);
         } else {
-            playSound(data[fronts[current]].audio_url);
             front.hidden = true;
             back.hidden = false;
         }
@@ -85,18 +84,13 @@
 
     function flip_restore_balance() {
         // every new card should first be seen as front
-        let front = document.getElementById('front');
-        let back = document.getElementById('back');
-        front.hidden = false;
-        back.hidden = true;
+        document.getElementById('front').hidden = false;
+        document.getElementById('back').hidden = true;
     }
 
-    function playSound(url) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", url); // todo: + corsheaders
-        xhr.send()
-        //let audio = new Audio(lexeme_id);
-        //audio.play();
+    function say_word(url) {
+        let audio = new Audio(url);
+        audio.play();
     }
 
 </script>

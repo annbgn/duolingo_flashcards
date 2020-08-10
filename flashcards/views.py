@@ -1,10 +1,9 @@
 import random
 
 import duolingo
+import ujson
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
-import ujson
 
 from .logic.duo import duo
 
@@ -43,7 +42,7 @@ def get_login_data_view(request):
 
 @csrf_exempt
 def practice(request):
-    from .logic.flashcard import Deck, deck
+    from .logic.flashcard import deck
 
     lang = request.POST.get("lang", None)
     vocab_dict = duo.duo.get_vocabulary(language_abbr=lang)
