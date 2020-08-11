@@ -15,8 +15,12 @@
 <body>
 
     <div class="top_navigation" id="top_navigation">
-        <a href="#home" class="active">Home</a>
-        <a href="#about">About</a>
+        <form action="{% url 'index' %}" method="POST">{% csrf_token %}
+            <a class="active"> <button id="home" type="submit" onclick="">Home</button></a>
+        </form>
+        <form action="{% url 'about' %}" method="POST">{% csrf_token %}
+            <a class="nav_button" a> <button id="about" type="submit" onclick="">About</button></a>
+        </form>
         <a href="javascript:void(0);" class="icon" onclick="responsive_top_navigation()">
             <i class="fa fa-bars"></i>
         </a>
@@ -29,6 +33,27 @@
                 } else {
                     x.className = "top_navigation";
                 }
+            }
+
+            let home = document.getElementById('home');
+            let about = document.getElementById('about');
+            [home, about].forEach(elem => transparentize(elem));
+
+            function transparentize(elem) {
+                console.log(elem);
+                elem.style.background = 'transparent';
+                elem.style.border = 'none';
+                elem.style.overflow = 'hidden';
+                elem.style.outline = 'none';
+                elem.style.color = "white";
+                elem.style.fontFamily = "georgia";
+                elem.style.fontSize = "2rem";
+                let p = elem.parentElement
+                if (p.className != 'active') {
+                    p.style.paddingTop = '0px';
+                    p.style.paddingBottom = '0px';
+                }
+
             }
 
         </script>
