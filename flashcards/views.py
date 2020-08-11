@@ -12,6 +12,10 @@ def index(request):
     return render(request, "flashcards/index.html")
 
 
+def about(request):
+    return render(request, "flashcards/about.html")
+
+
 def _validate_username(username):
     # todo implement check that it's not email
     return username
