@@ -33,9 +33,9 @@ class Deck:
                 audio_base = tts + "tts/" + random.choice(voices) + "/token"
 
         for i in raw:
-            self.flashcards.append(
-                Flashcard(i, self.target_lang, self.known_lang, translator, audio_base)
-            )
+            fc = Flashcard(i, self.target_lang, translator, audio_base)
+            if fc.back is not None and fc.back.isalpha():
+                self.flashcards.append(fc)
 
     def __str__(self):
         return "Deck({}, {}, {} flashcards)".format(
@@ -56,9 +56,8 @@ class Deck:
 
 
 class Flashcard:
-    def __init__(self, entry, target_lang, known_lang, translator, audio_base):
+    def __init__(self, entry, target_lang, translator, audio_base):
         self.target_lang = target_lang
-        self.known_lang = known_lang  # probably unused. todo: optimize
         self.front = entry.get("word_string")
         self.back = translator.translate(self.front)
         print(self.front, " ", self.back)

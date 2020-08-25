@@ -5,7 +5,6 @@
 <div id="current_flashcard" onclick="flip();">
     <p id="all_data" hidden> {{deck}} </p>
     <p id="front"></p>
-    <!--todo check somewhere previously, that deck.flachcards is not empty-->
     <p id="back"></p>
     <button id="wrong" onclick="addcard(); nextcard(); flip_restore_balance();">wrong</button>
     <button id="right" onclick="popcard(); nextcard(); flip_restore_balance();">right</button>
@@ -40,11 +39,10 @@
     var data = document.getElementById("all_data").innerHTML;
     data = JSON.parse(data);
     var fronts = Object.keys(data);
-    // todo check if data is not empty ( in django view mb)
     var current = 0;
 
     document.getElementById('front').innerHTML = fronts[current];
-    document.getElementById('back').innerHTML = data[fronts[current].back];
+    document.getElementById('back').innerHTML = data[fronts[current]].back;
     document.getElementById('back').hidden = true;
 
 

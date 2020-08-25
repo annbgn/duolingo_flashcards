@@ -2,6 +2,7 @@ import random
 
 import duolingo
 import ujson
+from django.http import Http404
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -60,6 +61,9 @@ def practice(request):
 
     deck.fill_deck(flashcard_billets, target_lang, known_lang)
     print(deck)
+
+    if not deck.flashcards:
+        raise Http404("couldn't get flashcards")
 
     data = {
         fc.front: {"back": fc.back, "audio_url": fc.audio_url} for fc in deck.flashcards

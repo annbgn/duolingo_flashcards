@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <p>Here is the list of your ratget languages</p>
+    <p>Here is the list of your target languages</p>
     <p>Choose one language for flashcards</p>
     <form action="{% url 'practice' %}" method="POST">{% csrf_token %}
         <label for="lang">Choose a language:</label>
